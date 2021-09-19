@@ -18,7 +18,8 @@ import arq.soft.front.forms.AddProductoForm;
 public class HomeController {
 
 
-    private WebClient webClient = WebClient.create("http://localhost:8081");
+    //private WebClient webClient = WebClient.create("http://localhost:8081");
+	private WebClient webClient = WebClient.create("https://arqsoftlibreback.herokuapp.com");
 
     @RequestMapping("/")
     public String welcome(Map<String, Object> model) {
