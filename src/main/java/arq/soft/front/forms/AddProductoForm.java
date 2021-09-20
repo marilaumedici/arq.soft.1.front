@@ -5,6 +5,8 @@ public class AddProductoForm {
 	private String nombre;
 	private String categoria;
 	private int cantidad;
+	private String descripcion;
+	private String precio;
 	
 	public String getNombre() {
 		return nombre;
@@ -23,6 +25,18 @@ public class AddProductoForm {
 	}
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
+	}
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	public String getPrecio() {
+		return precio;
+	}
+	public void setPrecio(String precio) {
+		this.precio = precio;
 	}
 
 }

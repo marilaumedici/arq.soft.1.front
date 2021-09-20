@@ -46,6 +46,8 @@ public class ProductoController extends AbstractController {
         	pNew.setCantidad(form.getCantidad());
         	pNew.setCategoria(form.getCategoria());
         	pNew.setNombre(form.getNombre());
+        	pNew.setDescripcion(form.getDescripcion());
+        	pNew.setPrecio(form.getPrecio());
         	
             getWebClient().post().uri("/productos")
                     .syncBody(pNew)
