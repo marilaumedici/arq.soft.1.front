@@ -13,4 +13,9 @@
 		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
 	</definition>
 
+    <definition name="producto" extends="home">
+		<put-attribute name="title" value="Productos" />
+		<put-attribute name="body"  value="/WEB-INF/jsp/producto.jsp" />
+	</definition>
+
 </tiles-definitions>
