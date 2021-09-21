@@ -13,4 +13,16 @@
 		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
 	</definition>
 
+    <!-- productos -->
+    
+    <definition name="producto" extends="home">
+		<put-attribute name="title" value="Productos" />
+		<put-attribute name="body"  value="/WEB-INF/jsp/producto.jsp" />
+	</definition>
+	
+	<definition name="modifyProducto" extends="home">
+		<put-attribute name="title" value="Productos" />
+		<put-attribute name="body"  value="/WEB-INF/jsp/modifyProducto.jsp" />
+	</definition>
+
 </tiles-definitions>
