@@ -5,16 +5,23 @@
 
     <div class="row">
 	  	<div class="col-md-12">
-	    	<h1>Vendedores:</h1>
+	    	<h1>Usuarios:</h1>
 	  	</div>
 	</div>
     <div class="row">
     	<div class="col-md-12">
-    		<form:form method="post" action="addVendedorForm">
+    		<form:form method="post" action="addUsuarioForm">
 				<div class="form-group row">
-				    <label for="staticRazonSocial" class="col-sm-2 col-form-label">Razón social:</label>
+				    <label for="staticNombre" class="col-sm-2 col-form-label">Nombre:</label>
 				    <div class="col-sm-5">
-				      <form:input path="razonSocial" class="form-control" />
+				      <form:input path="nombre" class="form-control" />
+				    </div>
+			  	</div>
+			  	<br>
+			  	<div class="form-group row">
+				    <label for="staticApellido" class="col-sm-2 col-form-label">Apellido:</label>
+				    <div class="col-sm-5">
+				      <form:input path="apellido" class="form-control" />
 				    </div>
 			  	</div>
 			  	<br>
@@ -34,15 +41,17 @@
     	<table class="table">
     		<thead>
     			<tr>
-    				<th scope="col">Razón social</th>
+    				<th scope="col">Nombre</th>
+    				<th scope="col">Apellido</th>
     				<th scope="col">Email</th>
     			</tr>
     		</thead>
     		<tbody>
-	    		<c:forEach items="${vendedores}" var="vendedor">
+	    		<c:forEach items="${usuarios}" var="usuario">
 			        <tr>
-			            <td><c:out value="${vendedor.razonSocial}"/></td>
-			            <td><c:out value="${vendedor.email}"/></td>
+			            <td><c:out value="${usuario.nombre}"/></td>
+			            <td><c:out value="${usuario.apellido}"/></td>
+			            <td><c:out value="${usuario.email}"/></td>
 			        </tr>
 			    </c:forEach>
 		  </tbody>
