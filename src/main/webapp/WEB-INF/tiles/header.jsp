@@ -1,9 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<table>
-  <tr>
-     <td><a href="/" style="margin-left:220px;" >Home</a></td>
-     <td><a href="/productos" style="margin-left:220px;" >Productos</a></td>
-  </tr>
-</table>
+<div class="col-md-12">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+	  <ul class="navbar-nav">
+	    <li class="nav-item active">
+	      <a class="nav-link" href="/">Home</a>
+	    </li>
+	    <li class="nav-item">
+	      <a class="nav-link" href="/productos">Productos</a>
+	    </li>
+	    <li class="nav-item">
+	      <a class="nav-link" href="/vendedores">Vendedores</a>
+	    </li>
+	  </ul>
+	</nav>
+</div>

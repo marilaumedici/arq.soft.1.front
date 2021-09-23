@@ -24,5 +24,12 @@
 		<put-attribute name="title" value="Productos" />
 		<put-attribute name="body"  value="/WEB-INF/jsp/modifyProducto.jsp" />
 	</definition>
+	
+	<!-- vendedor -->
+    
+    <definition name="vendedor" extends="home">
+		<put-attribute name="title" value="Vendedores" />
+		<put-attribute name="body"  value="/WEB-INF/jsp/vendedor.jsp" />
+	</definition>
 
 </tiles-definitions>

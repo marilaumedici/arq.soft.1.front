@@ -72,9 +72,9 @@
 			            <td><c:out value="${producto.categoria}"/></td>
 			            <td><c:out value="${producto.cantidad}"/></td>
 			            <td><c:out value="${producto.precio}"/></td>
-			            <td><c:out value="${producto.descripcion}"/></td>    
-			            <td><div class="btn btn-primary mb-2"><a href="redModifyProducto?getItem=${producto.id}">Modificar</a></div></td>
-			            <td><div class="btn btn-primary mb-2"><a href="deleteProducto?getItem=${producto.id}">Borrar</a></div></td>
+			            <td><c:out value="${producto.descripcion}"/></td>  
+			            <td><a href="redModifyProducto?getItem=${producto.id}"><span class="glyphicon glyphicon-pencil">Editar</span></a></td>
+			            <td><a href="deleteProducto?getItem=${producto.id}"><span class="glyphicon glyphicon-remove">Eliminar</span></a></td>
 			        </tr>
 			    </c:forEach>
 		  </tbody>
