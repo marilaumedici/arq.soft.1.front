@@ -39,44 +39,4 @@ public class VendedorController extends AbstractController {
 	    return model; 
     }
 	
-	// Metodos privados
-    private void agregarNuevoVendedor(AddVendedorForm form) {
-        try {
-        	
-        	Vendedor vNew = new Vendedor();
-        	vNew.setRazonSocial(form.getRazonSocial());
-        	vNew.setEmail(form.getEmail());
-        	
-            getWebClient().post().uri("/vendedores")
-                    .syncBody(vNew)
-                    .retrieve()
-                    .bodyToMono(Vendedor.class)
-                    .block();
-        } catch (WebClientResponseException ex) {
-            //log.error("Error Response code is : {} and the message is {}", ex.getRawStatusCode(), ex.getResponseBodyAsString());
-            //log.error("WebClientResponseException in addNewEmployee", ex);
-            throw ex;
-        } catch (Exception ex) {
-            //log.error("Exception in addNewEmployee ", ex);
-            throw ex;
-        }
-	}
-    
-	private List<Vendedor> obtenerVendedores() {
-        try {
-            return getWebClient().get().uri("/vendedores")
-                    .retrieve()
-                    .bodyToFlux(Vendedor.class)
-                    .collectList()
-                    .block();
-        } catch (WebClientResponseException ex) {
-            //log.error("Error Response code is : {} and the message is {}", ex.getRawStatusCode(), ex.getResponseBodyAsString());
-            //log.error("WebClientResponseException in retrieveAllEmployees", ex);
-            throw ex;
-        } catch (Exception ex) {
-            //log.error("Exception in retrieveAllEmployees ", ex);
-            throw ex;
-        }
-    }
-	
 }

@@ -12,7 +12,7 @@
     	<div class="col-md-12">
     		<form:form method="post" action="addVendedorForm">
 				<div class="form-group row">
-				    <label for="staticRazonSocial" class="col-sm-2 col-form-label">Razón social:</label>
+				    <label for="staticRazonSocial" class="col-sm-2 col-form-label">Raz&oacute;n social:</label>
 				    <div class="col-sm-5">
 				      <form:input path="razonSocial" class="form-control" />
 				    </div>
@@ -34,7 +34,7 @@
     	<table class="table">
     		<thead>
     			<tr>
-    				<th scope="col">Razón social</th>
+    				<th scope="col">Raz&oacute;n social</th>
     				<th scope="col">Email</th>
     			</tr>
     		</thead>

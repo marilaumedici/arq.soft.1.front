@@ -2,6 +2,7 @@ package arq.soft.front.forms;
 
 public class AddProductoForm {
 	
+	private long idVendedor;
 	private String nombre;
 	private String categoria;
 	private int cantidad;
@@ -37,6 +38,12 @@ public class AddProductoForm {
 	}
 	public void setPrecio(String precio) {
 		this.precio = precio;
+	}
+	public long getIdVendedor() {
+		return idVendedor;
+	}
+	public void setIdVendedor(long idVendedor) {
+		this.idVendedor = idVendedor;
 	}
 
 }

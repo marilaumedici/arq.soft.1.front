@@ -16,6 +16,9 @@
 		<div style="display: none;">
 			<form:input path="id"/>
 		</div>
+		<div style="display: none;">
+			<form:input path="idVendedor"/>
+		</div>
 		  <div class="form-group row">
 		    <label for="staticNombreProducto" class="col-sm-2 col-form-label">Nombre del producto:</label>
 		    <div class="col-sm-5">

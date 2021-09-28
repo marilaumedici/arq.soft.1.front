@@ -11,6 +11,15 @@
     <div class="row">
 	  <div class="col-md-12">
 		<form:form method="post" action="addProductoForm">
+		  <div>
+		  <label for="staticNombreVendedor" class="col-sm-2 col-form-label">Vendedor:</label>
+		        <div class="col-sm-5">
+			       <form:select id="vendedores" path="idVendedor">
+					    <form:options items="${vendedores}" itemLabel="razonSocial" itemValue="id"/>
+				   </form:select>
+			    </div>
+		  </div>
+		  <br>
 		  <div class="form-group row">
 		    <label for="staticNombreProducto" class="col-sm-2 col-form-label">Nombre del producto:</label>
 		    <div class="col-sm-5">
