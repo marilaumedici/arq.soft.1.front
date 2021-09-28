@@ -52,7 +52,7 @@ public class ProductoController extends AbstractController {
 		agregarNuevoProducto(form);
 		
 		List<Vendedor> vendedores = obtenerVendedoresSelectoOrdenado(form.getIdVendedor());
-		List<Producto> products = obtenerProductos();
+		List<Producto> products = obtenerProductos();//obtenerProductosByVendedor(form.getIdVendedor());//
 		
     	ModelAndView model = new ModelAndView("producto");
     	model.addObject("command", new AddProductoForm());
@@ -105,7 +105,7 @@ public class ProductoController extends AbstractController {
 		 List<Vendedor> vendedores = obtenerVendedoresSelectoOrdenado(form.getIdVendedor());
 		 
     	 ModelAndView model = new ModelAndView("producto");
-    	 List<Producto> products = obtenerProductos();
+    	 List<Producto> products = obtenerProductos();//obtenerProductosByVendedor(form.getIdVendedor());//
     	 AddProductoForm formALta = new AddProductoForm();
     	 formALta.setIdVendedor(form.getIdVendedor());
     	 model.addObject("command", formALta);
@@ -123,7 +123,7 @@ public class ProductoController extends AbstractController {
 		deleteProductoById(id);
 		
     	ModelAndView model = new ModelAndView("producto");
-    	List<Producto> products = obtenerProductos();
+    	List<Producto> products = obtenerProductos();//obtenerProductosByVendedor(idVendedor);//
 		List<Vendedor> vendedores = obtenerVendedoresSelectoOrdenado(idVendedor);
     	model.addObject("command", new AddProductoForm());
     	model.addObject("vendedores", vendedores);

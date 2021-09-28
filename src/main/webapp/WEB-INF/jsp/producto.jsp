@@ -23,35 +23,35 @@
 		  <div class="form-group row">
 		    <label for="staticNombreProducto" class="col-sm-2 col-form-label">Nombre del producto:</label>
 		    <div class="col-sm-5">
-		      <form:input path="nombre" class="form-control" />
+		      <form:input path="nombre" class="form-control" required="required" minlength="5" maxlength="30"  />
 		    </div>
 		  </div>
 		  <br>
 		  <div class="form-group row">
 		    <label for="inputCategoria" class="col-sm-2 col-form-label">Categoria:</label>
 		    <div class="col-sm-5">
-		      <form:input path="categoria" class="form-control"  />
+		      <form:input path="categoria" class="form-control" required="required" minlength="5" maxlength="30"  />
 		    </div>
 		  </div>
 		  <br>
 		  <div class="form-group row">
 		    <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad:</label>
 		    <div class="col-sm-5">
-		      <form:input path="cantidad" class="form-control" />
+		      <form:input path="cantidad" class="form-control" required="required" min="1" max="99999"  />
 		    </div>
 		  </div>
 		  <br>
 		  <div class="form-group row">
 		    <label for="inputPrecio" class="col-sm-2 col-form-label">Precio:</label>
 		    <div class="col-sm-5">
-		      <form:input path="precio" class="form-control" />
+		      <form:input path="precio" class="form-control" pattern="[1-9]{0,1}[0-9]{1,10}\.[0-9]{2}" required="required" minlength="4" maxlength="13" title="Usa 2 decimales y punto. Ejemplo 34.50"/>
 		    </div>
 		  </div>
 		  <br>
 		  <div class="form-group row">
 		    <label for="inputDescripcion" class="col-sm-2 col-form-label">Detalle:</label>
 		    <div class="col-sm-5">
-		      <form:input path="descripcion" class="form-control" />
+		      <form:input path="descripcion" class="form-control" minlength="5" maxlength="100" />
 		    </div>
 		  </div>		  
 		  <button type="submit" class="btn btn-primary mb-2">Agregar</button>

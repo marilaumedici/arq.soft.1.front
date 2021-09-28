@@ -14,14 +14,14 @@
 				<div class="form-group row">
 				    <label for="staticRazonSocial" class="col-sm-2 col-form-label">Raz&oacute;n social:</label>
 				    <div class="col-sm-5">
-				      <form:input path="razonSocial" class="form-control" />
+				      <form:input path="razonSocial" class="form-control" required="required" minlength="5" maxlength="30" />
 				    </div>
 			  	</div>
 			  	<br>
 			  	<div class="form-group row">
 				    <label for="inputEmail" class="col-sm-2 col-form-label">Email:</label>
 				    <div class="col-sm-5">
-				      <form:input path="email" class="form-control"  />
+				      <form:input path="email" class="form-control"  minlength="3" maxlength="60" />
 				    </div>
 			  	</div>
 			  	<button type="submit" class="btn btn-primary mb-2">Agregar</button>

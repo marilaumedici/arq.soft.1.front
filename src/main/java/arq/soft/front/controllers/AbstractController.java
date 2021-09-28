@@ -168,6 +168,24 @@ public abstract class AbstractController {
         }
     }
 	
+	protected List<Producto> obtenerProductosByVendedor(long id) {
+        try {
+            return getWebClient().get().uri("/productos/vendedor/"+id)
+                    .retrieve()
+                    .bodyToFlux(Producto.class)
+                    .collectList()
+                    .block();
+        } catch (WebClientResponseException ex) {
+            //log.error("Error Response code is : {} and the message is {}", ex.getRawStatusCode(), ex.getResponseBodyAsString());
+            //log.error("WebClientResponseException in retrieveAllEmployees", ex);
+            throw ex;
+        } catch (Exception ex) {
+            //log.error("Exception in retrieveAllEmployees ", ex);
+            throw ex;
+        }
+    }
+	
+	
 	
 	/** Get&Sett **/
 
