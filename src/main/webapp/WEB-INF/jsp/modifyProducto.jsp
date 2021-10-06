@@ -26,13 +26,7 @@
 		    </div>
 		  </div>
 		  <br>
-		  <div class="form-group row">
-		    <label for="inputCategoria" class="col-sm-2 col-form-label">Categoria:</label>
-		    <div class="col-sm-5">
-		      <form:input path="categoria" class="form-control"  />
-		    </div>
-		  </div>
-		  <br>
+	
 		  <div class="form-group row">
 		    <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad:</label>
 		    <div class="col-sm-5">

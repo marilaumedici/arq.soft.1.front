@@ -21,19 +21,22 @@
 		  </div>
 		  <br>
 		  <div class="form-group row">
+		  	<label for="staticNombreCategoria" class="col-sm-2 col-form-label">Categoria:</label>
+		    <div class="col-sm-5">
+			    <form:select class="form-control" id="categorias" path="idCategoria">
+					<form:options items="${categorias}" itemLabel="nombre" itemValue="id"/>
+				</form:select>
+			</div>
+		  </div>
+		  <br>
+		  <div class="form-group row">
 		    <label for="staticNombreProducto" class="col-sm-2 col-form-label">Nombre del producto:</label>
 		    <div class="col-sm-5">
 		      <form:input path="nombre" class="form-control" required="required" minlength="5" maxlength="30"  />
 		    </div>
 		  </div>
 		  <br>
-		  <div class="form-group row">
-		    <label for="inputCategoria" class="col-sm-2 col-form-label">Categoria:</label>
-		    <div class="col-sm-5">
-		      <form:input path="categoria" class="form-control" required="required" minlength="5" maxlength="30"  />
-		    </div>
-		  </div>
-		  <br>
+	
 		  <div class="form-group row">
 		    <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad:</label>
 		    <div class="col-sm-5">
@@ -78,7 +81,7 @@
 	    		<c:forEach items="${productos}" var="producto">
 			        <tr>
 			            <td><c:out value="${producto.nombre}"/></td>
-			            <td><c:out value="${producto.categoria}"/></td>
+			            <td><c:out value="${producto.categoria.nombre}"/></td>
 			            <td><c:out value="${producto.cantidad}"/></td>
 			            <td><c:out value="${producto.precio}"/></td>
 			            <td><c:out value="${producto.descripcion}"/></td>  

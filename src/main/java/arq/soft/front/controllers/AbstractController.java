@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import arq.soft.front.clientes.Categoria;
 import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Vendedor;
 import arq.soft.front.forms.AddProductoForm;
@@ -11,8 +12,8 @@ import arq.soft.front.forms.AddVendedorForm;
 
 public abstract class AbstractController {
 	
-	//private WebClient webClient = WebClient.create("http://localhost:8081");
-	private WebClient webClient = WebClient.create("https://arqsoftlibreback.herokuapp.com");
+	private WebClient webClient = WebClient.create("http://localhost:8081");
+	//private WebClient webClient = WebClient.create("https://arqsoftlibreback.herokuapp.com");
 	
 	//*********************VENDEDOR*****************************//
 	
@@ -130,7 +131,9 @@ public abstract class AbstractController {
         	
         	Producto pNew = new Producto();
         	pNew.setCantidad(form.getCantidad());
-        	pNew.setCategoria(form.getCategoria());
+        	Categoria c = new Categoria();
+        	c.setId(form.getIdCategoria());
+        	pNew.setCategoria(c);
         	pNew.setNombre(form.getNombre());
         	pNew.setDescripcion(form.getDescripcion());
         	pNew.setPrecio(form.getPrecio());
@@ -185,6 +188,22 @@ public abstract class AbstractController {
         }
     }
 	
+	protected List<Categoria> obtenerCategorias() {
+        try {
+            return getWebClient().get().uri("/categorias")
+                    .retrieve()
+                    .bodyToFlux(Categoria.class)
+                    .collectList()
+                    .block();
+        } catch (WebClientResponseException ex) {
+            //log.error("Error Response code is : {} and the message is {}", ex.getRawStatusCode(), ex.getResponseBodyAsString());
+            //log.error("WebClientResponseException in retrieveAllEmployees", ex);
+            throw ex;
+        } catch (Exception ex) {
+            //log.error("Exception in retrieveAllEmployees ", ex);
+            throw ex;
+        }
+    }
 	
 	
 	/** Get&Sett **/

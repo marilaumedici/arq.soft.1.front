@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import arq.soft.front.clientes.Categoria;
 import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Vendedor;
 import arq.soft.front.forms.AddProductoForm;
@@ -22,14 +24,16 @@ public class ProductoController extends AbstractController {
 	
 
     @RequestMapping("/productos")
-    public String welcome(Map<String, Object> model) {
+    public String productos(Map<String, Object> model) {
     	
     	List<Producto> products = obtenerProductos();
     	List<Vendedor> vendedores = obtenerVendedores();
+    	List<Categoria> categorias = obtenerCategorias();
     	
     	model.put("command", new AddProductoForm());
     	model.put("vendedores", vendedores);
         model.put("productos", products);
+        model.put("categorias", categorias);
         return "producto";
     }
     
@@ -40,10 +44,12 @@ public class ProductoController extends AbstractController {
 			
 			List<Vendedor> vendedores = obtenerVendedores();
 			List<Producto> products = obtenerProductos();
+			List<Categoria> categorias = obtenerCategorias();
 			
 			ModelAndView model = new ModelAndView("producto");
 	    	model.addObject("command", new AddProductoForm());
 	    	model.addObject("vendedores", vendedores);
+	    	model.addObject("categorias", categorias);
 	        model.addObject("productos", products);
 	        model.addObject("error","Debe elegir un vendedor. De no existir, crear uno.");
 		    return model; 
@@ -53,10 +59,11 @@ public class ProductoController extends AbstractController {
 		
 		List<Vendedor> vendedores = obtenerVendedoresSelectoOrdenado(form.getIdVendedor());
 		List<Producto> products = obtenerProductos();//obtenerProductosByVendedor(form.getIdVendedor());//
-		
+		List<Categoria> categorias = obtenerCategorias();
     	ModelAndView model = new ModelAndView("producto");
     	model.addObject("command", new AddProductoForm());
     	model.addObject("vendedores", vendedores);
+    	model.addObject("categorias", categorias);
         model.addObject("productos", products);
 	    return model; 
     }
@@ -70,7 +77,7 @@ public class ProductoController extends AbstractController {
 			
             ModifyProductoForm form = new ModifyProductoForm();
             form.setCantidad(producto.getCantidad());
-            form.setCategoria(producto.getCategoria());
+            //form.setCategoria(producto.getCategoria());
             form.setDescripcion(producto.getDescripcion());
             form.setId(id);
             form.setNombre(producto.getNombre());
@@ -94,7 +101,7 @@ public class ProductoController extends AbstractController {
   
 		 Producto producto = new Producto();
 		 producto.setCantidad(form.getCantidad());
-		 producto.setCategoria(form.getCategoria());
+		 //producto.setCategoria(form.getCategoria());
 		 producto.setDescripcion(form.getDescripcion());
 		 producto.setId(form.getId());
 		 producto.setNombre(form.getNombre());
@@ -103,12 +110,13 @@ public class ProductoController extends AbstractController {
 		 updateProducto(producto);
 		 
 		 List<Vendedor> vendedores = obtenerVendedoresSelectoOrdenado(form.getIdVendedor());
-		 
+		 List<Categoria> categorias = obtenerCategorias();
     	 ModelAndView model = new ModelAndView("producto");
     	 List<Producto> products = obtenerProductos();//obtenerProductosByVendedor(form.getIdVendedor());//
     	 AddProductoForm formALta = new AddProductoForm();
     	 formALta.setIdVendedor(form.getIdVendedor());
     	 model.addObject("command", formALta);
+    	 model.addObject("categorias", categorias);
     	 model.addObject("vendedores", vendedores);
          model.addObject("productos", products);
 	     return model; 
@@ -117,7 +125,7 @@ public class ProductoController extends AbstractController {
 
 	@RequestMapping(value = "/deleteProducto", method = RequestMethod.GET)
     public Object deleteProducto(@RequestParam("getItem") long id) {
-  
+		List<Categoria> categorias = obtenerCategorias();
 		Producto producto = buscarProducto(id);
 		long idVendedor = producto.getIdVendedor();
 		deleteProductoById(id);
@@ -127,6 +135,7 @@ public class ProductoController extends AbstractController {
 		List<Vendedor> vendedores = obtenerVendedoresSelectoOrdenado(idVendedor);
     	model.addObject("command", new AddProductoForm());
     	model.addObject("vendedores", vendedores);
+    	model.addObject("categorias", categorias);
     	model.addObject("productos", products);
 	    return model; 
     }
