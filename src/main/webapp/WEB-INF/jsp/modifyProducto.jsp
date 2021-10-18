@@ -30,7 +30,7 @@
 		  <div class="form-group row">
 		    <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad:</label>
 		    <div class="col-sm-5">
-		      <form:input path="cantidad" class="form-control" required="required" min="1" max="99999"  />
+		      <form:input path="cantidad" class="form-control" required="required" pattern="[0-9][0-9]{0,5}" title="La cantidad maxima permitida es 999999"  />
 		    </div>
 		  </div>
 		  <br>
