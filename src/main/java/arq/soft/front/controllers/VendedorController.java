@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import arq.soft.front.clientes.Vendedor;
+import arq.soft.front.exceptions.EmailEnUsoException;
 import arq.soft.front.forms.AddVendedorForm;
 
 @Controller
@@ -38,9 +39,15 @@ public class VendedorController extends AbstractController {
 	    	List<Vendedor> vendedores = obtenerVendedores();
 	    	model.addObject("command", new AddVendedorForm());
 	        model.addObject("vendedores", vendedores);
-		}catch(ResponseStatusException e){
+		}catch(EmailEnUsoException e){
+			List<Vendedor> vendedores = obtenerVendedores();
+	    	model.addObject("command", new AddVendedorForm());
+	        model.addObject("vendedores", vendedores);
 	        model.addObject("error","Debe elegir un elegir un email que no se encuentre en el sistema.");
 		}catch(Exception e){
+			List<Vendedor> vendedores = obtenerVendedores();
+	    	model.addObject("command", new AddVendedorForm());
+	        model.addObject("vendedores", vendedores);
 			model.addObject("error", "Ocurrio un error interno, por favor comunicarse con el administrador.");
 		}
 		

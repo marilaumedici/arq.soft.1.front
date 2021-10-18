@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import arq.soft.front.clientes.Usuario;
+import arq.soft.front.exceptions.EmailEnUsoException;
 import arq.soft.front.forms.AddUsuarioForm;
 
 @Controller
@@ -37,9 +38,15 @@ public class UsuarioController extends AbstractController {
 	    	List<Usuario> usuarios = obtenerUsuarios();
 	    	model.addObject("command", new AddUsuarioForm());
 	        model.addObject("usuarios", usuarios);
-		}catch(ResponseStatusException e){
+		}catch(EmailEnUsoException e){
+		 	List<Usuario> usuarios = obtenerUsuarios();
+	    	model.addObject("command", new AddUsuarioForm());
+	        model.addObject("usuarios", usuarios);
 	        model.addObject("error","Debe elegir un elegir un email que no se encuentre en el sistema.");
 		}catch(Exception e){
+		 	List<Usuario> usuarios = obtenerUsuarios();
+	    	model.addObject("command", new AddUsuarioForm());
+	        model.addObject("usuarios", usuarios);
 			model.addObject("error", "Ocurrio un error interno, por favor comunicarse con el administrador.");
 		}
 

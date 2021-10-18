@@ -1,6 +1,8 @@
 package arq.soft.front.controllers;
 
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ResponseStatusException;
@@ -9,6 +11,7 @@ import arq.soft.front.clientes.Categoria;
 import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Usuario;
 import arq.soft.front.clientes.Vendedor;
+import arq.soft.front.exceptions.EmailEnUsoException;
 import arq.soft.front.forms.AddProductoForm;
 import arq.soft.front.forms.AddUsuarioForm;
 import arq.soft.front.forms.AddVendedorForm;
@@ -21,7 +24,7 @@ public abstract class AbstractController {
 
 	// *********************VENDEDOR*****************************//
 
-	protected void agregarNuevoVendedor(AddVendedorForm form) {
+	protected void agregarNuevoVendedor(AddVendedorForm form) throws EmailEnUsoException {
 		try {
 
 			Vendedor vNew = new Vendedor();
@@ -32,12 +35,11 @@ public abstract class AbstractController {
 		} catch (ResponseStatusException ex) {
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			// log.error("Error Response code is : {} and the message is {}",
-			// ex.getRawStatusCode(), ex.getResponseBodyAsString());
-			// log.error("WebClientResponseException in addNewEmployee", ex);
+	        if(ex.getStatusCode() == HttpStatus.BAD_REQUEST) {
+	        	throw new EmailEnUsoException();
+	        }
 			throw ex;
 		} catch (Exception ex) {
-			// log.error("Exception in addNewEmployee ", ex);
 			throw ex;
 		}
 	}
@@ -71,7 +73,7 @@ public abstract class AbstractController {
 	}
 
 	// *********************USUARIO*****************************//
-	protected void agregarNuevoUsuario(AddUsuarioForm form) {
+	protected void agregarNuevoUsuario(AddUsuarioForm form) throws EmailEnUsoException {
 		try {
 
 			Usuario uNew = new Usuario();
@@ -83,9 +85,9 @@ public abstract class AbstractController {
 		} catch (ResponseStatusException ex) {
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			// log.error("Error Response code is : {} and the message is {}",
-			// ex.getRawStatusCode(), ex.getResponseBodyAsString());
-			// log.error("WebClientResponseException in addNewEmployee", ex);
+			 if(ex.getStatusCode() == HttpStatus.BAD_REQUEST) {
+		        	throw new EmailEnUsoException();
+		        }
 			throw ex;
 		} catch (Exception ex) {
 			// log.error("Exception in addNewEmployee ", ex);
