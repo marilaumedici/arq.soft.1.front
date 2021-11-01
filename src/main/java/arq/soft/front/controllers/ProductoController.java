@@ -16,6 +16,7 @@ import arq.soft.front.clientes.Categoria;
 import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Vendedor;
 import arq.soft.front.forms.AddProductoForm;
+import arq.soft.front.forms.BuscarProductoFiltroForm;
 import arq.soft.front.forms.ModifyProductoForm;
 
 
@@ -139,6 +140,31 @@ public class ProductoController extends AbstractController {
     	model.addObject("productos", products);
 	    return model; 
     }
+	
+	@RequestMapping(value = "/productos/filter", method = RequestMethod.GET)
+    public Object welcome(@RequestParam("getItem") long id) {
+    	
+		List<Producto> products = obtenerProductosByCategoriaId(id);
+		List<Categoria> categorias = obtenerCategorias();
+		ModelAndView model = new ModelAndView("home");
+		model.addObject("command", new BuscarProductoFiltroForm());
+        model.addObject("productos", products);
+        model.addObject("categorias", categorias);
+        return model;
+    }
+	
+	@RequestMapping(value = "/productos/buscarProductoDetalleForm", method = RequestMethod.POST)
+    public Object addProducto(@ModelAttribute("buscarProductoDetalleForm") BuscarProductoFiltroForm form, BindingResult result) {
+		
+		    List<Categoria> categorias = obtenerCategorias();
+		    List<Producto> products = obtenerProductosByDescripcion(form.getDescripcion());
+			
+			ModelAndView model = new ModelAndView("home");
+	    	model.addObject("command", new BuscarProductoFiltroForm());
+	        model.addObject("productos", products);
+	        model.addObject("categorias", categorias);
+		    return model; 
+	}
 	
 	
 	/**
