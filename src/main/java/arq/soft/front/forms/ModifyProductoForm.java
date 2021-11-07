@@ -8,7 +8,7 @@ public class ModifyProductoForm {
 	private String categoria;
 	private int cantidad;
 	private String descripcion;
-	private String precio;
+	private double precio;
 	
 	public String getNombre() {
 		return nombre;
@@ -34,10 +34,10 @@ public class ModifyProductoForm {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	public String getPrecio() {
+	public double getPrecio() {
 		return precio;
 	}
-	public void setPrecio(String precio) {
+	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
 	public long getId() {
