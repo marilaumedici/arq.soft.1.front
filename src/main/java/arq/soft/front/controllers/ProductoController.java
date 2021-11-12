@@ -1,17 +1,23 @@
 package arq.soft.front.controllers;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import arq.soft.front.clientes.Categoria;
 import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Vendedor;
@@ -166,6 +172,30 @@ public class ProductoController extends AbstractController {
 		    return model; 
 	}
 	
+
+    @RequestMapping(value = "/import", method = RequestMethod.POST)
+    public void cargarProductosMasivamente(@RequestParam("file") MultipartFile reapExcelDataFile) {
+       
+        List<Producto> tempStudentList = new ArrayList<Producto>();
+        XSSFWorkbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        XSSFSheet worksheet = workbook.getSheetAt(0);
+        
+        for(int i=1;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+        	Producto productos = new Producto();
+                
+            XSSFRow row = worksheet.getRow(i);
+                
+           // tempStudent.setId((int) row.getCell(0).getNumericCellValue());
+            //tempStudent.setContent(row.getCell(1).getStringCellValue());
+            //tempStudentList.add(tempStudent);   
+        }
+    }
 	
 	/**
 	 * Metodo para retornar la lista de vendedores ordenadas primero

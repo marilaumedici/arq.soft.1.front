@@ -58,8 +58,21 @@
 		    </div>
 		  </div>		  
 		  <button type="submit" class="btn btn-primary mb-2">Agregar</button>
-	
 		</form:form>
+	  </div>
+	</div>
+	<br>
+	<div class="row">
+	  <div class="col-md-12">
+	    <h4>O carga tus productos desde un excel:</h4>
+	  </div>
+
+	  <div>
+	    <form action="import" method="post" enctype="multipart/form-data">
+		    <input type="file" name="file" />
+		    <input type="submit" value="Import" />
+		</form>
+	
 	  </div>
 	</div>
 	<br>
