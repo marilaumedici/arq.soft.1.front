@@ -62,8 +62,8 @@ public class ProductoController extends AbstractController {
 	        model.addObject("error","Debe elegir un vendedor. De no existir, crear uno.");
 		    return model; 
 		}
-		
-		agregarNuevoProducto(form);
+
+		agregarNuevoProducto(form.getCantidad(),form.getIdCategoria(),form.getNombre(),form.getDescripcion(),form.getPrecio(),form.getIdVendedor()); 
 		
 		List<Vendedor> vendedores = obtenerVendedoresSelectoOrdenado(form.getIdVendedor());
 		List<Producto> products = obtenerProductos();//obtenerProductosByVendedor(form.getIdVendedor());//
@@ -211,7 +211,8 @@ public class ProductoController extends AbstractController {
 
             XSSFRow row = worksheet.getRow(i);
             
-            
+    		//agregarNuevoProducto(form.getCantidad(),form.getIdCategoria(),form.getNombre(),form.getDescripcion(),form.getPrecio(),form.getIdVendedor()); 
+
            // tempStudent.setId((int) row.getCell(0).getNumericCellValue());
             //tempStudent.setContent(row.getCell(1).getStringCellValue());
             //tempStudentList.add(tempStudent);   

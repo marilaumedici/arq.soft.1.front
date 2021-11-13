@@ -169,18 +169,18 @@ public abstract class AbstractController {
 		}
 	}
 
-	protected void agregarNuevoProducto(AddProductoForm form) {
+	protected void agregarNuevoProducto(int cantidad, long idCategoria,String nombre,String descripcion, double precio, long idvendedor) {
 		try {
 
 			Producto pNew = new Producto();
-			pNew.setCantidad(form.getCantidad());
+			pNew.setCantidad(cantidad);
 			Categoria c = new Categoria();
-			c.setId(form.getIdCategoria());
+			c.setId(idCategoria);
 			pNew.setCategoria(c);
-			pNew.setNombre(form.getNombre());
-			pNew.setDescripcion(form.getDescripcion());
-			pNew.setPrecio(form.getPrecio());
-			pNew.setIdVendedor(form.getIdVendedor());
+			pNew.setNombre(nombre);
+			pNew.setDescripcion(descripcion);
+			pNew.setPrecio(precio);
+			pNew.setIdVendedor(idvendedor);
 
 			getWebClient().post().uri("/productos").syncBody(pNew).retrieve().bodyToMono(Producto.class).block();
 		} catch (WebClientResponseException ex) {
