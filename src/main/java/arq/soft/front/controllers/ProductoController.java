@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import arq.soft.front.clientes.Categoria;
 import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Vendedor;
+import arq.soft.front.exceptions.VendedorNoEncontradoException;
 import arq.soft.front.forms.AddProductoForm;
 import arq.soft.front.forms.BuscarProductoFiltroForm;
 import arq.soft.front.forms.ModifyProductoForm;
@@ -174,27 +175,58 @@ public class ProductoController extends AbstractController {
 	
 
     @RequestMapping(value = "/import", method = RequestMethod.POST)
-    public void cargarProductosMasivamente(@RequestParam("file") MultipartFile reapExcelDataFile) {
+    public Object cargarProductosMasivamente(@RequestParam("file") MultipartFile reapExcelDataFile) {
        
-        List<Producto> tempStudentList = new ArrayList<Producto>();
         XSSFWorkbook workbook = null;
 		try {
 			workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
         XSSFSheet worksheet = workbook.getSheetAt(0);
         
+        XSSFRow usuarioRow = worksheet.getRow(0);
+        String  email      = usuarioRow.getCell(0).getStringCellValue();
+        Vendedor  vendedor = null;
+        try {
+        	
+        	vendedor = buscarVendedorByEmail(email);
+        	
+		} catch (VendedorNoEncontradoException e) {
+			
+			List<Vendedor> vendedores = obtenerVendedores();
+			List<Producto> products = obtenerProductos();
+			List<Categoria> categorias = obtenerCategorias();
+			
+			ModelAndView model = new ModelAndView("producto");
+	    	model.addObject("command", new AddProductoForm());
+	    	model.addObject("vendedores", vendedores);
+	    	model.addObject("categorias", categorias);
+	        model.addObject("productos", products);
+	        model.addObject("error","Debe colocar en la primera celda del excel el email de un vendedor existente. De no existir, crear uno.");
+		    return model; 
+		}
+        
         for(int i=1;i<worksheet.getPhysicalNumberOfRows() ;i++) {
-        	Producto productos = new Producto();
-                
+
             XSSFRow row = worksheet.getRow(i);
-                
+            
+            
            // tempStudent.setId((int) row.getCell(0).getNumericCellValue());
             //tempStudent.setContent(row.getCell(1).getStringCellValue());
             //tempStudentList.add(tempStudent);   
         }
+        
+    	List<Vendedor> vendedores = obtenerVendedores();
+		List<Producto> products = obtenerProductos();
+		List<Categoria> categorias = obtenerCategorias();
+		
+		ModelAndView model = new ModelAndView("producto");
+    	model.addObject("command", new AddProductoForm());
+    	model.addObject("vendedores", vendedores);
+    	model.addObject("categorias", categorias);
+        model.addObject("productos", products);
+        return model;
     }
 	
 	/**

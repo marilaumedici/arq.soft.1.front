@@ -12,6 +12,7 @@ import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Usuario;
 import arq.soft.front.clientes.Vendedor;
 import arq.soft.front.exceptions.EmailEnUsoException;
+import arq.soft.front.exceptions.VendedorNoEncontradoException;
 import arq.soft.front.forms.AddProductoForm;
 import arq.soft.front.forms.AddUsuarioForm;
 import arq.soft.front.forms.AddVendedorForm;
@@ -66,6 +67,20 @@ public abstract class AbstractController {
 			// ex.getRawStatusCode(), ex.getResponseBodyAsString());
 			// log.error("WebClientResponseException in retrieveEmployeeById", ex);
 			throw ex;
+		} catch (Exception ex) {
+			// log.error("Exception in retrieveEmployeeById ", ex);
+			throw ex;
+		}
+	}
+	
+	protected Vendedor buscarVendedorByEmail(String email) throws VendedorNoEncontradoException {
+		try {
+			return getWebClient().get().uri("/vendedores/vendedor/" + email).retrieve().bodyToMono(Vendedor.class).block();
+		} catch (WebClientResponseException ex) {
+			    if(ex.getStatusCode() == HttpStatus.BAD_REQUEST) {
+		        	throw new VendedorNoEncontradoException();
+		        }
+				throw ex;
 		} catch (Exception ex) {
 			// log.error("Exception in retrieveEmployeeById ", ex);
 			throw ex;
