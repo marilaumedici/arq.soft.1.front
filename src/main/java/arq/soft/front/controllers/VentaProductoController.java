@@ -13,8 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import arq.soft.front.clientes.Categoria;
 import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Usuario;
-import arq.soft.front.clientes.Vendedor;
-import arq.soft.front.forms.AddProductoForm;
+import arq.soft.front.exceptions.ProductoSinStockException;
 import arq.soft.front.forms.AddVentaProductoForm;
 import arq.soft.front.forms.BuscarProductoFiltroForm;
 
@@ -23,9 +22,6 @@ import arq.soft.front.forms.BuscarProductoFiltroForm;
 public class VentaProductoController extends AbstractController {
 	@RequestMapping(value = "/redComprarProducto", method = RequestMethod.GET)
 	public ModelAndView redirectComprarProducto(@RequestParam("getItem") long id){
-		
-		try{
-			
             Producto producto = buscarProducto(id);
         	List<Usuario> usuarios = obtenerUsuarios();
 
@@ -38,13 +34,6 @@ public class VentaProductoController extends AbstractController {
 	    	m.addObject("usuarios", usuarios);
 
 			return m;
-			
-		}catch(Exception e){
-			
-			ModelAndView m = new ModelAndView("home");
-			m.addObject("error", "Ocurrio un error interno, por favor comunicarse con el administrador.");
-			return m;
-		}
 	}
 	
 	@RequestMapping(value = "/addVentaProductoForm", method = RequestMethod.POST)
@@ -60,17 +49,36 @@ public class VentaProductoController extends AbstractController {
 		    return model; 
 		}
 
-		agregarNuevaVentaProducto(form.getCantidadComprada(),form.getIdProducto(),form.getIdComprador()); 
-		
-	    List<Categoria> categorias = obtenerCategorias();
-	    List<Producto> products = obtenerProductos();
-		
-		ModelAndView model = new ModelAndView("home");
-    	model.addObject("command", new BuscarProductoFiltroForm());
-        model.addObject("productos", products);
-        model.addObject("categorias", categorias);
-        
-	    return model; 
+		try {
+			agregarNuevaVentaProducto(form.getCantidadComprada(),form.getIdProducto(),form.getIdComprador()); 	
+
+		    List<Categoria> categorias = obtenerCategorias();
+		    List<Producto> products = obtenerProductos();
+			
+			ModelAndView model = new ModelAndView("home");
+	    	model.addObject("command", new BuscarProductoFiltroForm());
+	        model.addObject("productos", products);
+	        model.addObject("categorias", categorias);
+	        
+		    return model; 
+		}catch(ProductoSinStockException e){
+            Producto producto = buscarProducto(form.getIdProducto());
+            AddVentaProductoForm nform = new AddVentaProductoForm();
+
+            nform.setCantidadMaxima(producto.getCantidad());
+            nform.setIdProducto(form.getIdProducto());
+            
+	    	ModelAndView model = new ModelAndView("ventaProducto");
+	    	model.addObject("command", nform);
+	    	
+        	List<Usuario> usuarios = obtenerUsuarios();
+
+        	model.addObject("usuarios", usuarios);
+	        model.addObject("error","Producto sin stock. Intente con una cantidad menor.");
+
+			return model;
+		}
+
     }
 	
 }

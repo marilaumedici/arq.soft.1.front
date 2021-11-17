@@ -13,6 +13,7 @@ import arq.soft.front.clientes.Usuario;
 import arq.soft.front.clientes.Vendedor;
 import arq.soft.front.clientes.VentaProducto;
 import arq.soft.front.exceptions.EmailEnUsoException;
+import arq.soft.front.exceptions.ProductoSinStockException;
 import arq.soft.front.exceptions.VendedorNoEncontradoException;
 import arq.soft.front.forms.AddProductoForm;
 import arq.soft.front.forms.AddUsuarioForm;
@@ -281,7 +282,7 @@ public abstract class AbstractController {
 		}
 	}
 	
-	protected void agregarNuevaVentaProducto(int cantidad, long idProducto, long idComprador) {
+	protected void agregarNuevaVentaProducto(int cantidad, long idProducto, long idComprador) throws ProductoSinStockException {
 		try {
 
 			VentaProducto pNew = new VentaProducto();
@@ -291,9 +292,9 @@ public abstract class AbstractController {
 
 			getWebClient().post().uri("/ventaProductos").syncBody(pNew).retrieve().bodyToMono(VentaProducto.class).block();
 		} catch (WebClientResponseException ex) {
-			// log.error("Error Response code is : {} and the message is {}",
-			// ex.getRawStatusCode(), ex.getResponseBodyAsString());
-			// log.error("WebClientResponseException in addNewEmployee", ex);
+			if(ex.getStatusCode() == HttpStatus.BAD_REQUEST) {
+	        	throw new ProductoSinStockException();
+	        }
 			throw ex;
 		} catch (Exception ex) {
 			// log.error("Exception in addNewEmployee ", ex);
