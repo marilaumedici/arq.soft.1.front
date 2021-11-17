@@ -11,6 +11,7 @@ import arq.soft.front.clientes.Categoria;
 import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Usuario;
 import arq.soft.front.clientes.Vendedor;
+import arq.soft.front.clientes.VentaProducto;
 import arq.soft.front.exceptions.EmailEnUsoException;
 import arq.soft.front.exceptions.VendedorNoEncontradoException;
 import arq.soft.front.forms.AddProductoForm;
@@ -264,7 +265,41 @@ public abstract class AbstractController {
 			throw ex;
 		}
 	}
+	
+	// *********************VENTA DE PRODUCTOS**************************//
+	protected List<VentaProducto> obtenerVentaProductos() {
+		try {
+			return getWebClient().get().uri("/ventaProductos").retrieve().bodyToFlux(VentaProducto.class).collectList().block();
+		} catch (WebClientResponseException ex) {
+			// log.error("Error Response code is : {} and the message is {}",
+			// ex.getRawStatusCode(), ex.getResponseBodyAsString());
+			// log.error("WebClientResponseException in retrieveAllEmployees", ex);
+			throw ex;
+		} catch (Exception ex) {
+			// log.error("Exception in retrieveAllEmployees ", ex);
+			throw ex;
+		}
+	}
+	
+	protected void agregarNuevaVentaProducto(int cantidad, long idProducto, long idComprador) {
+		try {
 
+			VentaProducto pNew = new VentaProducto();
+			pNew.setCantidadComprada(cantidad);
+			pNew.setIdProducto(idProducto);
+			pNew.setIdComprador(idComprador);
+
+			getWebClient().post().uri("/ventaProductos").syncBody(pNew).retrieve().bodyToMono(VentaProducto.class).block();
+		} catch (WebClientResponseException ex) {
+			// log.error("Error Response code is : {} and the message is {}",
+			// ex.getRawStatusCode(), ex.getResponseBodyAsString());
+			// log.error("WebClientResponseException in addNewEmployee", ex);
+			throw ex;
+		} catch (Exception ex) {
+			// log.error("Exception in addNewEmployee ", ex);
+			throw ex;
+		}
+	}
 	/** Get&Sett **/
 
 	public WebClient getWebClient() {

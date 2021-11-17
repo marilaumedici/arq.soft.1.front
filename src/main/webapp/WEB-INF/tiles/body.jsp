@@ -45,6 +45,7 @@
 							      		<th scope="col">Cantidad</th>
 							      		<th scope="col">Precio</th>
 							      		<th scope="col">Detalle</th>
+							      		<th scope="col">Acciones</th>
 					    			</tr>
 					    		</thead>
 					    		<tbody>
@@ -55,6 +56,7 @@
 								            <td><c:out value="${producto.cantidad}"/></td>
 								            <td><c:out value="${producto.precio}"/></td>
 								            <td><c:out value="${producto.descripcion}"/></td>  
+								            <td><a href="redComprarProducto?getItem=${producto.id}"><span class="glyphicon glyphicon-shopping-cart">Comprar</span></a></td>
 								        </tr>
 								    </c:forEach>
 							  </tbody>
