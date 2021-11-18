@@ -12,6 +12,7 @@ import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Usuario;
 import arq.soft.front.clientes.Vendedor;
 import arq.soft.front.clientes.VentaProducto;
+import arq.soft.front.exceptions.CategoriaNotFoundException;
 import arq.soft.front.exceptions.EmailEnUsoException;
 import arq.soft.front.exceptions.ProductoSinStockException;
 import arq.soft.front.exceptions.VendedorNoEncontradoException;
@@ -263,6 +264,20 @@ public abstract class AbstractController {
 			throw ex;
 		} catch (Exception ex) {
 			// log.error("Exception in retrieveAllEmployees ", ex);
+			throw ex;
+		}
+	}
+	
+	protected Categoria buscarCategoriaByNombre(String categoria) throws CategoriaNotFoundException  {
+		try {
+			return getWebClient().get().uri("/categorias/" + categoria).retrieve().bodyToMono(Categoria.class).block();
+		} catch (WebClientResponseException ex) {
+			    if(ex.getStatusCode() == HttpStatus.BAD_REQUEST) {
+		        	throw new CategoriaNotFoundException();
+		        }
+				throw ex;
+		} catch (Exception ex) {
+			// log.error("Exception in retrieveEmployeeById ", ex);
 			throw ex;
 		}
 	}

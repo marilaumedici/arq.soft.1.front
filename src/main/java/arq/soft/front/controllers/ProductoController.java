@@ -21,10 +21,16 @@ import org.springframework.web.servlet.ModelAndView;
 import arq.soft.front.clientes.Categoria;
 import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Vendedor;
+import arq.soft.front.exceptions.CategoriaNotFoundException;
+import arq.soft.front.exceptions.InvalidCantidadProductoException;
+import arq.soft.front.exceptions.InvalidDetalleNombreException;
+import arq.soft.front.exceptions.InvalidPrecioException;
+import arq.soft.front.exceptions.InvalidProductoNombreException;
 import arq.soft.front.exceptions.VendedorNoEncontradoException;
 import arq.soft.front.forms.AddProductoForm;
 import arq.soft.front.forms.BuscarProductoFiltroForm;
 import arq.soft.front.forms.ModifyProductoForm;
+import arq.soft.front.utils.Utils;
 
 
 @Controller
@@ -177,6 +183,8 @@ public class ProductoController extends AbstractController {
     @RequestMapping(value = "/import", method = RequestMethod.POST)
     public Object cargarProductosMasivamente(@RequestParam("file") MultipartFile reapExcelDataFile) {
        
+    	List<String> errores = new ArrayList<String>();
+    	
         XSSFWorkbook workbook = null;
 		try {
 			workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
@@ -194,28 +202,43 @@ public class ProductoController extends AbstractController {
         	
 		} catch (VendedorNoEncontradoException e) {
 			
-			List<Vendedor> vendedores = obtenerVendedores();
-			List<Producto> products = obtenerProductos();
-			List<Categoria> categorias = obtenerCategorias();
-			
-			ModelAndView model = new ModelAndView("producto");
-	    	model.addObject("command", new AddProductoForm());
-	    	model.addObject("vendedores", vendedores);
-	    	model.addObject("categorias", categorias);
-	        model.addObject("productos", products);
-	        model.addObject("error","Debe colocar en la primera celda del excel el email de un vendedor existente. De no existir, crear uno.");
-		    return model; 
+			return errorNoEncontroVendedor(); 
 		}
         
         for(int i=1;i<worksheet.getPhysicalNumberOfRows() ;i++) {
 
             XSSFRow row = worksheet.getRow(i);
             
-    		//agregarNuevoProducto(form.getCantidad(),form.getIdCategoria(),form.getNombre(),form.getDescripcion(),form.getPrecio(),form.getIdVendedor()); 
+            try {
+            	
+            	String categoriaNombre =  row.getCell(0).getStringCellValue();
+            	Categoria categoria = buscarCategoriaByNombre(categoriaNombre);
+            	
+                String cantidad =  row.getCell(1).getStringCellValue();
+                Utils.validarCantidadProducto(cantidad);
+                
+                String productoNombre =  row.getCell(2).getStringCellValue();
+                Utils.validarNombreProducto(productoNombre);
+                
+                String descripcion =  row.getCell(3).getStringCellValue();
+                Utils.validarDetalleProducto(descripcion);
+                
+                String precioProducto = row.getCell(4).getStringCellValue();
+                Utils.validarPrecioProducto(precioProducto);
+                
+        		agregarNuevoProducto(Integer.valueOf(cantidad),categoria.getId(),productoNombre,descripcion,Double.parseDouble(precioProducto),vendedor.getId()); 
 
-           // tempStudent.setId((int) row.getCell(0).getNumericCellValue());
-            //tempStudent.setContent(row.getCell(1).getStringCellValue());
-            //tempStudentList.add(tempStudent);   
+            }catch(CategoriaNotFoundException e) {
+            	errores.add("La categoria del producto de la fila "+ i+1 + " no existe");
+            } catch (InvalidCantidadProductoException e) {
+            	errores.add("La cantidad del producto de la fila "+ i+1 + " es invalida");
+			} catch (InvalidProductoNombreException e) {
+				errores.add("El nombre del producto de la fila "+ i+1 + " es invalido");
+			} catch (InvalidDetalleNombreException e) {
+				errores.add("El detalle del producto de la fila "+ i+1 + " es invalido");
+			} catch (InvalidPrecioException e) {
+				errores.add("El precio del producto de la fila "+ i+1 + " es invalido");
+			}
         }
         
     	List<Vendedor> vendedores = obtenerVendedores();
@@ -227,8 +250,32 @@ public class ProductoController extends AbstractController {
     	model.addObject("vendedores", vendedores);
     	model.addObject("categorias", categorias);
         model.addObject("productos", products);
+        
+        if(!errores.isEmpty()) {
+        	
+        	String mensajeError = "Algunos de los productos no pudo crearse:" + "\n";
+        	for(String e : errores) {
+        		mensajeError = mensajeError + e + "\n";
+        	}
+    		model.addObject("error",mensajeError);
+        }
+        
         return model;
     }
+
+	private Object errorNoEncontroVendedor() {
+		List<Vendedor> vendedores = obtenerVendedores();
+		List<Producto> products = obtenerProductos();
+		List<Categoria> categorias = obtenerCategorias();
+		
+		ModelAndView model = new ModelAndView("producto");
+		model.addObject("command", new AddProductoForm());
+		model.addObject("vendedores", vendedores);
+		model.addObject("categorias", categorias);
+		model.addObject("productos", products);
+		model.addObject("error","Debe colocar en la primera celda del excel el email de un vendedor existente. De no existir, crear uno.");
+		return model;
+	}
 	
 	/**
 	 * Metodo para retornar la lista de vendedores ordenadas primero
