@@ -70,7 +70,7 @@
 	  <div>
 	    <form action="import" method="post" enctype="multipart/form-data">
 		    <input type="file" name="file" />
-		    <input type="submit" value="Import" />
+		    <input type="submit" value="Cargar" class="btn btn-primary mb-2" />
 		</form>
 	
 	  </div>

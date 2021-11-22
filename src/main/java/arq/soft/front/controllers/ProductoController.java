@@ -205,6 +205,11 @@ public class ProductoController extends AbstractController {
 			return errorNoEncontroVendedor(); 
 		}
         
+        int rows = worksheet.getPhysicalNumberOfRows() - 1;
+        if(rows > 20) {
+        	return errorMaxCantidadProductosIntroducida();
+        }
+        
         for(int i=1;i<worksheet.getPhysicalNumberOfRows() ;i++) {
 
             XSSFRow row = worksheet.getRow(i);
@@ -214,7 +219,9 @@ public class ProductoController extends AbstractController {
             	String categoriaNombre =  row.getCell(0).getStringCellValue();
             	Categoria categoria = buscarCategoriaByNombre(categoriaNombre);
             	
-                String cantidad =  row.getCell(1).getStringCellValue();
+                //String cantidad =  row.getCell(1).getStringCellValue();
+                int cantidadNum =  (int) row.getCell(1).getNumericCellValue();
+                String cantidad = String.valueOf(cantidadNum);
                 Utils.validarCantidadProducto(cantidad);
                 
                 String productoNombre =  row.getCell(2).getStringCellValue();
@@ -229,15 +236,20 @@ public class ProductoController extends AbstractController {
         		agregarNuevoProducto(Integer.valueOf(cantidad),categoria.getId(),productoNombre,descripcion,Double.parseDouble(precioProducto),vendedor.getId()); 
 
             }catch(CategoriaNotFoundException e) {
-            	errores.add("La categoria del producto de la fila "+ i+1 + " no existe");
+            	int num = i+1;
+            	errores.add("La categoria del producto de la fila "+ num + " no existe");
             } catch (InvalidCantidadProductoException e) {
-            	errores.add("La cantidad del producto de la fila "+ i+1 + " es invalida");
+            	int num = i+1;
+            	errores.add("La cantidad del producto de la fila "+ num + " es invalida");
 			} catch (InvalidProductoNombreException e) {
-				errores.add("El nombre del producto de la fila "+ i+1 + " es invalido");
+				int num = i+1;
+				errores.add("El nombre del producto de la fila "+ num + " es invalido");
 			} catch (InvalidDetalleNombreException e) {
-				errores.add("El detalle del producto de la fila "+ i+1 + " es invalido");
+				int num = i+1;
+				errores.add("El detalle del producto de la fila "+ num + " es invalido");
 			} catch (InvalidPrecioException e) {
-				errores.add("El precio del producto de la fila "+ i+1 + " es invalido");
+				int num = i+1;
+				errores.add("El precio del producto de la fila "+ num + " es invalido");
 			}
         }
         
@@ -262,6 +274,20 @@ public class ProductoController extends AbstractController {
         
         return model;
     }
+
+	private Object errorMaxCantidadProductosIntroducida() {
+		List<Vendedor> vendedores = obtenerVendedores();
+		List<Producto> products = obtenerProductos();
+		List<Categoria> categorias = obtenerCategorias();
+		
+		ModelAndView model = new ModelAndView("producto");
+		model.addObject("command", new AddProductoForm());
+		model.addObject("vendedores", vendedores);
+		model.addObject("categorias", categorias);
+		model.addObject("productos", products);
+		model.addObject("error","El excel solo admite hasta 20 productos.");
+		return model;
+	}
 
 	private Object errorNoEncontroVendedor() {
 		List<Vendedor> vendedores = obtenerVendedores();
