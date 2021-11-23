@@ -4,7 +4,7 @@
 
 <c:if test="${not empty error}">
 	
-	<div><c:out value="${error}"></c:out></div>
+	<div style="color:red;" ><c:out value="${error}"></c:out></div>
 	
 </c:if>
 

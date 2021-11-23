@@ -205,12 +205,12 @@ public class ProductoController extends AbstractController {
 			return errorNoEncontroVendedor(); 
 		}
         
-        int rows = worksheet.getPhysicalNumberOfRows() - 1;
+        int rows = worksheet.getPhysicalNumberOfRows() - 2;
         if(rows > 20) {
         	return errorMaxCantidadProductosIntroducida();
         }
         
-        for(int i=1;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+        for(int i=1;i<= rows ;i++) {
 
             XSSFRow row = worksheet.getRow(i);
             
@@ -237,19 +237,19 @@ public class ProductoController extends AbstractController {
 
             }catch(CategoriaNotFoundException e) {
             	int num = i+1;
-            	errores.add("La categoria del producto de la fila "+ num + " no existe");
+            	errores.add("La categoria del producto de la fila "+ num + " no existe. ");
             } catch (InvalidCantidadProductoException e) {
             	int num = i+1;
-            	errores.add("La cantidad del producto de la fila "+ num + " es invalida");
+            	errores.add("La cantidad del producto de la fila "+ num + " es invalida, la cantidad maxima permitida es 999999. ");
 			} catch (InvalidProductoNombreException e) {
 				int num = i+1;
-				errores.add("El nombre del producto de la fila "+ num + " es invalido");
+				errores.add("El nombre del producto de la fila "+ num + " es invalido, debe tener tamaño 5 a 30. ");
 			} catch (InvalidDetalleNombreException e) {
 				int num = i+1;
-				errores.add("El detalle del producto de la fila "+ num + " es invalido");
+				errores.add("El detalle del producto de la fila "+ num + " es invalido, debe tener tamaño 5 a 100. ");
 			} catch (InvalidPrecioException e) {
 				int num = i+1;
-				errores.add("El precio del producto de la fila "+ num + " es invalido");
+				errores.add("El precio del producto de la fila "+ num + " es invalido, usa 2 decimales y punto, ejemplo 34.50. ");
 			}
         }
         
