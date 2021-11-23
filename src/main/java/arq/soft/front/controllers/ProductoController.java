@@ -1,14 +1,21 @@
 package arq.soft.front.controllers;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import org.springframework.http.MediaType;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -179,6 +186,45 @@ public class ProductoController extends AbstractController {
 		    return model; 
 	}
 	
+	@RequestMapping(value = "/export", method = RequestMethod.GET)
+    public ResponseEntity<Resource>  devolverModeloExcelCargarProductos() {
+    	
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet spreadsheet = workbook.createSheet("productos");
+		
+		XSSFRow rowVendedor = spreadsheet.createRow(0);
+		XSSFCell celVendedor = rowVendedor.createCell(0);
+		celVendedor.setCellValue("Email vendedor");
+		XSSFRow emptySpace = spreadsheet.createRow(1);
+		XSSFRow rowHeader = spreadsheet.createRow(2);
+		XSSFCell celCategoria = rowHeader.createCell(0);
+		celCategoria.setCellValue("Categoria");
+		XSSFCell celCantidad = rowHeader.createCell(1);
+		celCantidad.setCellValue("Cantidad");
+		XSSFCell celNombre = rowHeader.createCell(2);
+		celNombre.setCellValue("Nombre");
+		XSSFCell celDetalle = rowHeader.createCell(3);
+		celDetalle.setCellValue("Descripcion");
+		XSSFCell celPrecio = rowHeader.createCell(4);
+		celPrecio.setCellValue("Precio");
+		
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+
+		}
+		 
+		String filename = "productos.xlsx";
+		InputStreamResource file = new InputStreamResource(new ByteArrayInputStream(out.toByteArray()));
+
+		return ResponseEntity.ok()
+		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+		        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+		        .body(file);
+
+    }
+	
 
     @RequestMapping(value = "/import", method = RequestMethod.POST)
     public Object cargarProductosMasivamente(@RequestParam("file") MultipartFile reapExcelDataFile) {
@@ -193,7 +239,7 @@ public class ProductoController extends AbstractController {
 		}
         XSSFSheet worksheet = workbook.getSheetAt(0);
         
-        XSSFRow usuarioRow = worksheet.getRow(0);
+        XSSFRow usuarioRow = worksheet.getRow(1);
         String  email      = usuarioRow.getCell(0).getStringCellValue();
         Vendedor  vendedor = null;
         try {
@@ -205,12 +251,13 @@ public class ProductoController extends AbstractController {
 			return errorNoEncontroVendedor(); 
 		}
         
-        int rows = worksheet.getPhysicalNumberOfRows() - 2;
+        int rows = worksheet.getPhysicalNumberOfRows() - 3;
         if(rows > 20) {
         	return errorMaxCantidadProductosIntroducida();
         }
         
-        for(int i=1;i<= rows ;i++) {
+        int i = 3;
+        for(int x=1;x<= rows ;x++) {
 
             XSSFRow row = worksheet.getRow(i);
             
@@ -219,7 +266,6 @@ public class ProductoController extends AbstractController {
             	String categoriaNombre =  row.getCell(0).getStringCellValue();
             	Categoria categoria = buscarCategoriaByNombre(categoriaNombre);
             	
-                //String cantidad =  row.getCell(1).getStringCellValue();
                 int cantidadNum =  (int) row.getCell(1).getNumericCellValue();
                 String cantidad = String.valueOf(cantidadNum);
                 Utils.validarCantidadProducto(cantidad);
@@ -250,7 +296,11 @@ public class ProductoController extends AbstractController {
 			} catch (InvalidPrecioException e) {
 				int num = i+1;
 				errores.add("El precio del producto de la fila "+ num + " es invalido, usa 2 decimales y punto, ejemplo 34.50. ");
+			} catch (Exception e) {
+				int num = i+1;
+				errores.add("Hubo un error, no se pudo realizar la carga del producto de la fila "+ num);
 			}
+            i = i + 1;
         }
         
     	List<Vendedor> vendedores = obtenerVendedores();

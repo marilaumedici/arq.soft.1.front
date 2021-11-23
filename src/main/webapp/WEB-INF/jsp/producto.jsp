@@ -64,7 +64,7 @@
 	<br>
 	<div class="row">
 	  <div class="col-md-12">
-	    <h4>O carga tus productos desde un excel:</h4>
+	    <h4>O carga tus productos desde un <a  href="/export">excel</a> </h4>
 	  </div>
 
 	  <div>
@@ -75,6 +75,8 @@
 	
 	  </div>
 	</div>
+
+	
 	<br>
 	<div class="row">
 	  <div class="col-md-12">
