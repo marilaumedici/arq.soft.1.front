@@ -1,9 +1,16 @@
-package arq.soft.front.forms;
+package arq.soft.front.clientes;
 
-public class BuscarProductoFiltroForm {
+
+public class FiltrosBusqueda {
 	
+	 
+
+	public void setPrecioMinimo(double precioMinimo) {
+		this.precioMinimo = precioMinimo;
+	}
+
 	private String descripcion;
-	
+
 	private double precioMinimo;
 	
 	private double precioMaximo;
@@ -18,10 +25,6 @@ public class BuscarProductoFiltroForm {
 
 	public double getPrecioMinimo() {
 		return precioMinimo;
-	}
-
-	public void setPrecioMinimo(double precioMinimo) {
-		this.precioMinimo = precioMinimo;
 	}
 
 	public double getPrecioMaximo() {

@@ -38,6 +38,7 @@ import arq.soft.front.forms.AddProductoForm;
 import arq.soft.front.forms.BuscarProductoFiltroForm;
 import arq.soft.front.forms.ModifyProductoForm;
 import arq.soft.front.utils.Utils;
+import io.micrometer.core.instrument.util.StringUtils;
 
 
 @Controller
@@ -176,8 +177,19 @@ public class ProductoController extends AbstractController {
 	@RequestMapping(value = "/productos/buscarProductoDetalleForm", method = RequestMethod.POST)
     public Object addProducto(@ModelAttribute("buscarProductoDetalleForm") BuscarProductoFiltroForm form, BindingResult result) {
 		
+		    if(StringUtils.isBlank(form.getDescripcion()) && form.getPrecioMaximo() <= 0 && form.getPrecioMinimo() <= 0) {
+		    	List<Categoria> categorias = obtenerCategorias();
+		        List<Producto> products = obtenerProductos();
+		    	ModelAndView model = new ModelAndView("home");
+		    	model.addObject("command", new BuscarProductoFiltroForm());
+		        model.addObject("productos", products);
+		        model.addObject("categorias", categorias);
+		        model.addObject("error", "Debe buscar por detalle o precio.");
+			    return model; 
+		    }
+		
 		    List<Categoria> categorias = obtenerCategorias();
-		    List<Producto> products = obtenerProductosByDescripcion(form.getDescripcion());
+		    List<Producto> products = obtenerProductosByDescripcionPrecios(form.getDescripcion(),form.getPrecioMinimo(),form.getPrecioMaximo());
 			
 			ModelAndView model = new ModelAndView("home");
 	    	model.addObject("command", new BuscarProductoFiltroForm());
@@ -296,6 +308,9 @@ public class ProductoController extends AbstractController {
 			} catch (InvalidPrecioException e) {
 				int num = i+1;
 				errores.add("El precio del producto de la fila "+ num + " es invalido, usa 2 decimales y punto, ejemplo 34.50. ");
+			}catch(IllegalStateException e) {
+				int num = i+1;
+				errores.add("Algunos de los valores del producto de la fila "+ num +" no respetan el formato de la columna. ");
 			} catch (Exception e) {
 				int num = i+1;
 				errores.add("Hubo un error, no se pudo realizar la carga del producto de la fila "+ num);

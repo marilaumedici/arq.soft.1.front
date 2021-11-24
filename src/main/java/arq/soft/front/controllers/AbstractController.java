@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.server.ResponseStatusException;
 
 import arq.soft.front.clientes.Categoria;
+import arq.soft.front.clientes.FiltrosBusqueda;
 import arq.soft.front.clientes.Producto;
 import arq.soft.front.clientes.Usuario;
 import arq.soft.front.clientes.Vendedor;
@@ -19,6 +20,7 @@ import arq.soft.front.exceptions.VendedorNoEncontradoException;
 import arq.soft.front.forms.AddProductoForm;
 import arq.soft.front.forms.AddUsuarioForm;
 import arq.soft.front.forms.AddVendedorForm;
+import arq.soft.front.forms.BuscarProductoFiltroForm;
 
 public abstract class AbstractController {
 
@@ -221,6 +223,23 @@ public abstract class AbstractController {
 			throw ex;
 		} catch (Exception ex) {
 			// log.error("Exception in retrieveAllEmployees ", ex);
+			throw ex;
+		}
+	}
+	
+	protected List<Producto> obtenerProductosByDescripcionPrecios(String descripcion, double d, double e) {
+		try {
+
+			FiltrosBusqueda f = new FiltrosBusqueda();
+			f.setDescripcion(descripcion);
+			f.setPrecioMaximo(e);
+			f.setPrecioMinimo(d);
+
+			return (List<Producto>) getWebClient().post().uri("/productos/buscar").syncBody(f).retrieve().bodyToMono(List.class).block();
+		} catch (WebClientResponseException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			// log.error("Exception in addNewEmployee ", ex);
 			throw ex;
 		}
 	}

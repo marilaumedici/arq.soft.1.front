@@ -24,10 +24,25 @@
 			            <div class="form-group row">
 						    <label for="staticNombre" class="col-sm-2 col-form-label">Buscar:</label>
 						    <div class="col-sm-5">
-						      <form:input path="descripcion" class="form-control" required="required" minlength="1" maxlength="30" />
+						      <form:input path="descripcion" class="form-control"  minlength="1" maxlength="30" />
 						    </div>
 					  	</div>
-					  	<br>
+					
+					  	  <br>
+						  <div class="form-group row">
+						    <label for="inputPrecioMin" class="col-sm-2 col-form-label">Precio minimo</label>
+						    <div class="col-sm-5">
+						      <form:input path="precioMinimo" class="form-control" pattern="[1-9]{0,1}[0-9]{1,10}\.[0-9]{2}"  minlength="4" maxlength="13" title="Usa 2 decimales y punto. Ejemplo 34.50"/>
+						    </div>
+						  </div>
+						  <br>
+						    <div class="form-group row">
+						    <label for="inputPrecioMax" class="col-sm-2 col-form-label">Precio m&aacute;ximo</label>
+						    <div class="col-sm-5">
+						      <form:input path="precioMaximo" class="form-control" pattern="[1-9]{0,1}[0-9]{1,10}\.[0-9]{2}"  minlength="4" maxlength="13" title="Usa 2 decimales y punto. Ejemplo 34.50"/>
+						    </div>
+						  </div>
+						  <br>
 				  	    <button type="submit" class="btn btn-primary mb-2">Buscar</button>
 				      </form:form>
 		          </div>
